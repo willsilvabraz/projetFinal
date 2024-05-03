@@ -27,12 +27,12 @@ if (!isset($_SESSION['cargo'])) {
                     <img src="./img/OIG3.3Kje.lad.png" >
                     <p>Pos Dash</p>
                 </div>
-                <a class="nav-link active" href="#" id="link-dashboard">Dashboard</a>
-                <a class="nav-link" href="#" id="link-clientes">Gerenciar Clientes</a>
-                <a class="nav-link" href="#" id="link-produtos">Gerenciar Produtos</a>
-                <a class="nav-link" href="#" id="link-vendas">Realizar Vendas</a>
-                <a class="nav-link" href="#" id="link-listar-vendas">Listar Vendas</a>
-                <a class="nav-link" href="#" id="link-sair">Sair</a>
+                <a class="nav-link active" href="" id="link-dashboard">Dashboard</a>
+                <a class="nav-link" href="" id="link-clientes">Gerenciar Clientes</a>
+                <a class="nav-link" href="" id="link-produtos">Gerenciar Produtos</a>
+                <a class="nav-link" href="" id="link-vendas">Realizar Vendas</a>
+                <a class="nav-link" href="" id="link-listar-vendas">Listar Vendas</a>
+                <a class="nav-link" href="" id="link-sair">Sair</a>
             </nav>
         </div>
         <div class="col-md-9 col-lg-10 content" id="main-content">
