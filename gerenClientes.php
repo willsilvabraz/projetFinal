@@ -1,38 +1,30 @@
 <?php
+require_once 'sessao.php';
+require_once 'Firebase.php';
 
-require __dir__.'/vendor/autoload.php';
-use Kreait\Firebase\Factory;
+$sessao = Sessao::getInstancia();
+$sessao->requerLogin();
 
-// Verifica a sessão
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Verifica se o usuário está autenticado
-if (!isset($_SESSION['cargo'])) {
-    header("Location: login.php");
-    exit();
-}
-
-// Inicializa a classe Firebase
 $firebase = Firebase::getInstance();
+$database = $firebase->getDatabase();
 
-// Verifica se o método de requisição é POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Verifica se todos os campos do formulário estão definidos e não estão vazios
-    if (isset($_POST['nome']) && isset($_POST['sobrenome']) && isset($_POST['endereco']) && isset($_POST['email']) && isset($_POST['telefone']) && isset($_POST['cpf']) && isset($_POST['cnpj']) && !empty($_POST['nome']) && !empty($_POST['sobrenome']) && !empty($_POST['endereco']) && !empty($_POST['email']) && !empty($_POST['telefone']) && !empty($_POST['cpf']) || !empty($_POST['cnpj'])) {
+    if (
+        isset($_POST['nome']) && isset($_POST['sobrenome']) && isset($_POST['endereco']) &&
+        isset($_POST['email']) && isset($_POST['telefone']) && 
+        (isset($_POST['cpf']) || isset($_POST['cnpj'])) && 
+        !empty($_POST['nome']) && !empty($_POST['sobrenome']) && !empty($_POST['endereco']) && 
+        !empty($_POST['email']) && !empty($_POST['telefone']) && 
+        (!empty($_POST['cpf']) || !empty($_POST['cnpj']))
+    ) {
         $nome = $_POST['nome'];
         $sobrenome = $_POST['sobrenome'];
         $endereco = $_POST['endereco'];
         $email = $_POST['email'];
         $telefone = $_POST['telefone'];
-        $cpf = $_POST['cpf'];
-        $cnpj = $_POST['cnpj'];
+        $cpf = $_POST['cpf'] ?? '';
+        $cnpj = $_POST['cnpj'] ?? '';
 
-        // Obtém a referência do banco de dados
-        $database = $firebase->getDatabase();
-
-        // Insere os dados do cliente no banco de dados
         $database->getReference('clientes')->push([
             'nome' => $nome,
             'sobrenome' => $sobrenome,
@@ -42,26 +34,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'cpf' => $cpf,
             'cnpj' => $cnpj
         ]);
-    } 
+    }
 }
 
-// Verifica se há um parâmetro 'delete' na URL para exclusão de cliente
 if (isset($_GET['delete'])) {
     $cliente_id = $_GET['delete'];
-
-    // Obtém a referência do banco de dados
-    $database = $firebase->getDatabase();
-
-    // Remove o cliente do banco de dados
     $database->getReference('clientes/' . $cliente_id)->remove();
 }
 
-// Obtém a referência do banco de dados para recuperar os clientes
-$database = $firebase->getDatabase();
 $contatos = $database->getReference('clientes')->getSnapshot();
 $clientes = $contatos->getValue();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -78,26 +61,47 @@ $clientes = $contatos->getValue();
     .compact-table th, .compact-table td {
         padding: 5px;
     }
-</style>
-
+    </style>
 </head>
 <body>
 
 <div class="container">
-<div class="col-12" id="cad">
-        <form method="POST"  action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+    <div class="col-12" id="cad">
+        <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <h1>Cadastro de Clientes</h1>
-            
             <div class="form-group">
                 <label for="nome">Nome:</label>
                 <input type="text" class="form-control" id="nome" name="nome" required placeholder="Digite seu Nome">
             </div>
-            <!-- Restante do formulário... -->
+            <div class="form-group">
+                <label for="sobrenome">Sobrenome:</label>
+                <input type="text" class="form-control" id="sobrenome" name="sobrenome" required placeholder="Digite seu Sobrenome">
+            </div>
+            <div class="form-group">
+                <label for="endereco">Endereço:</label>
+                <input type="text" class="form-control" id="endereco" name="endereco" required placeholder="Digite seu Endereço">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" required placeholder="Digite seu Email">
+            </div>
+            <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input type="text" class="form-control" id="telefone" name="telefone" required placeholder="Digite seu Telefone">
+            </div>
+            <div class="form-group">
+                <label for="cpf">CPF:</label>
+                <input type="text" class="form-control" id="cpf" name="cpf" placeholder="Digite seu CPF">
+            </div>
+            <div class="form-group">
+                <label for="cnpj">CNPJ:</label>
+                <input type="text" class="form-control" id="cnpj" name="cnpj" placeholder="Digite seu CNPJ">
+            </div>
             <button type="submit" class="btn btn-primary">Cadastrar Cliente</button>
         </form>
     </div>
 
-    <table class="table compact-table" id="listacli" >
+    <table class="table compact-table" id="listacli">
         <h2>Lista de Clientes</h2>
         <thead>
             <tr>
@@ -112,23 +116,28 @@ $clientes = $contatos->getValue();
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($clientes as $key => $cliente): ?>
+            <?php if ($clientes): ?>
+                <?php foreach ($clientes as $key => $cliente): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($cliente['nome']); ?></td>
+                        <td><?php echo htmlspecialchars($cliente['sobrenome']); ?></td>
+                        <td><?php echo htmlspecialchars($cliente['endereco']); ?></td>
+                        <td><?php echo htmlspecialchars($cliente['email']); ?></td>
+                        <td><?php echo htmlspecialchars($cliente['telefone']); ?></td>
+                        <td><?php echo htmlspecialchars($cliente['cpf']); ?></td>
+                        <td><?php echo htmlspecialchars($cliente['cnpj']); ?></td>
+                        <td>
+                            <a href="?delete=<?php echo $key; ?>" class="btn btn-danger">Deletar</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
                 <tr>
-                    <td><?php echo $cliente['nome']; ?></td>
-                    <td><?php echo $cliente['sobrenome']; ?></td>
-                    <td><?php echo $cliente['endereco']; ?></td>
-                    <td><?php echo $cliente['email']; ?></td>
-                    <td><?php echo $cliente['telefone']; ?></td>
-                    <td><?php echo $cliente['cpf']; ?></td>
-                    <td><?php echo $cliente['cnpj']; ?></td>
-                    <td>
-                        <a href="?delete=<?php echo $key; ?>" class="btn btn-danger">Deletar</a>
-                    </td>
+                    <td colspan="8">Nenhum cliente encontrado.</td>
                 </tr>
-            <?php endforeach; ?>
+            <?php endif; ?>
         </tbody>
     </table>
-    
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

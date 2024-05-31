@@ -1,13 +1,20 @@
 <?php
-require __DIR__.'/vendor/autoload.php';
+require_once 'sessao.php';
 require_once 'Firebase.php';
+
+$sessao = Sessao::getInstancia();
+$sessao->requerLogin();
+
+require __DIR__.'/vendor/autoload.php';
 
 $firebase = Firebase::getInstance();
 $database = $firebase->getDatabase();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['cliente_id']) && isset($_POST['produto_id']) && isset($_POST['quantidade']) && !empty($_POST['cliente_id']) && !empty($_POST['produto_id']) && !empty($_POST['quantidade'])) {
-       
+    if (
+        isset($_POST['cliente_id']) && isset($_POST['produto_id']) && isset($_POST['quantidade']) &&
+        !empty($_POST['cliente_id']) && !empty($_POST['produto_id']) && !empty($_POST['quantidade'])
+    ) {
         $cliente_id = $_POST['cliente_id'];
         $produto_id = $_POST['produto_id'];
         $quantidade = $_POST['quantidade'];
@@ -33,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             echo "Cliente ou produto não encontrado.";
         }
-    } 
+    }
 }
 ?>
 

@@ -1,16 +1,14 @@
 <?php
-session_start();
 require __dir__.'/vendor/autoload.php';
+
+require_once 'sessao.php';
 require_once 'Firebase.php';
 
-if (!isset($_SESSION['cargo'])) {
-    header("Location: login.php");
-    exit();
-}
+$sessao = Sessao::getInstancia();
+$sessao->requerLogin();
 
 $firebaseConnection = Firebase::getInstance();
 $database = $firebaseConnection->getDatabase();
-
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +45,7 @@ $database = $firebaseConnection->getDatabase();
             <div id="produtos-content" style="display: none;"><?php include_once('gerenProduto.php');?></div>
             <div id="vendas-content" style="display: none;"><?php include_once('venda.php');?></div>
             <div id="listar-vendas-content" style="display: none;"><?php include_once('listVenda.php');?></div>
-            <div id="sair-content" style="display: none;"></div>
+            <div id="sair-content" style="display: none;"><?php Sessao::getInstancia()->destruir(); ?></div>
         </div>
     </div>
 </div>

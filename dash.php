@@ -1,21 +1,16 @@
 <?php
+require_once 'sessao.php';
+require_once 'Firebase.php';
+
+$sessao = Sessao::getInstancia();
+$sessao->requerLogin();
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-if (!isset($_SESSION['cargo'])) {
-    header("Location: login.php");
-    exit();
-}
-
-require __dir__.'/vendor/autoload.php';
-use Kreait\Firebase\Factory;
-
 $firebase = Firebase::getInstance();
-
 $database = $firebase->getDatabase();
-
 $contatos = $database->getReference('vendas')->getSnapshot();
 $vendas = $contatos->getValue();
 

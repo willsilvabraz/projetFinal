@@ -1,7 +1,10 @@
 <?php
-session_start();
 require __dir__.'/vendor/autoload.php';
 require_once 'Firebase.php';
+require_once 'Sessao.php';
+
+$sessao = Sessao::getInstancia();
+$sessao->requerLogin();
 
 $firebaseConnection = Firebase::getInstance();
 $database = $firebaseConnection->getDatabase();
@@ -17,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'descricao' => $descricao,
             'preco' => $preco
         ]);
-    } 
+    }
 }
 
 if (isset($_GET['delete'])) {
@@ -37,13 +40,12 @@ $produtos = $contatos->getValue();
     <title>Produtos</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles/gerenClientes.css">
-    
 </head>
 <body>
 
 <div class="container">
-<div class="col-12" id="cad" >
-        <form  method="POST"  action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+    <div class="col-12" id="cad">
+        <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <h1>Cadastro de Produtos</h1>
             <div class="form-group">
                 <label for="nome">Nome:</label>
@@ -61,7 +63,7 @@ $produtos = $contatos->getValue();
         </form>
     </div>
 
-    <table class="table-responsive" id="listaprod" >
+    <table class="table-responsive" id="listaprod">
         <h2>Lista de Produtos</h2>
         <thead>
             <tr>
@@ -74,9 +76,9 @@ $produtos = $contatos->getValue();
         <tbody>
             <?php foreach ($produtos as $key => $produto): ?>
                 <tr>
-                    <td><?php echo $produto['nome']; ?></td>
-                    <td><?php echo $produto['descricao']; ?></td>
-                    <td><?php echo $produto['preco']; ?></td>
+                    <td><?php echo htmlspecialchars($produto['nome']); ?></td>
+                    <td><?php echo htmlspecialchars($produto['descricao']); ?></td>
+                    <td><?php echo htmlspecialchars($produto['preco']); ?></td>
                     <td>
                         <a href="?delete=<?php echo $key; ?>" class="btn btn-danger">Deletar</a>
                     </td>
@@ -84,12 +86,10 @@ $produtos = $contatos->getValue();
             <?php endforeach; ?>
         </tbody>
     </table>
-    
 </div>
 
 <script>
-
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     var precoInput = document.getElementById('preco');
     precoInput.addEventListener('input', function (event) {
         var unformattedValue = this.value.replace(/[^\d]/g, '');
@@ -97,17 +97,8 @@ $produtos = $contatos->getValue();
         this.value = formattedValue;
     });
 });
-
-document.addEventListener('DOMContentLoaded', function () {
-    var deleteButtons = document.querySelectorAll('.delete-button');
-    deleteButtons.forEach(function (button) {
-        button.addEventListener('click', function (event) {
-            event.preventDefault(); 
-            var produtoId = this.dataset.produtoId; 
-        });
-    });
-});
 </script>
 
 </body>
 </html>
+
