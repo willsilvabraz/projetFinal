@@ -1,10 +1,16 @@
 <?php
 session_start();
+require __dir__.'/vendor/autoload.php';
+require_once 'Firebase.php';
 
 if (!isset($_SESSION['cargo'])) {
     header("Location: login.php");
     exit();
 }
+
+$firebaseConnection = Firebase::getInstance();
+$database = $firebaseConnection->getDatabase();
+
 ?>
 
 <!DOCTYPE html>

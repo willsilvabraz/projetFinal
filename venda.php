@@ -1,10 +1,9 @@
 <?php
-require __dir__.'/vendor/autoload.php';
-use Kreait\Firebase\Factory;
+require __DIR__.'/vendor/autoload.php';
+require_once 'Firebase.php';
 
-$factory = (new Factory())->withDatabaseUri('https://teste-dfb53-default-rtdb.firebaseio.com/');
-$database = $factory->createDatabase();
-
+$firebase = Firebase::getInstance();
+$database = $firebase->getDatabase();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['cliente_id']) && isset($_POST['produto_id']) && isset($_POST['quantidade']) && !empty($_POST['cliente_id']) && !empty($_POST['produto_id']) && !empty($_POST['quantidade'])) {
@@ -15,7 +14,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $cliente = $database->getReference('clientes/' . $cliente_id)->getValue();
         $produto = $database->getReference('produtos/' . $produto_id)->getValue();
-
 
         if ($cliente && $produto) {
             $total = $produto['preco'] * $quantidade;
@@ -30,7 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $novoEstoque = $produto['estoque'] - $quantidade;
             $database->getReference('produtos/' . $produto_id . '/estoque')->set($novoEstoque);
-
             header("Location: vendas.php?success=1");
             exit();
         } else {

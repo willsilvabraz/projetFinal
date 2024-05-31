@@ -1,6 +1,4 @@
 <?php
-
-
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -11,13 +9,12 @@ if (!isset($_SESSION['cargo'])) {
 }
 
 require __dir__.'/vendor/autoload.php';
-use Kreait\Firebase\Factory;
+require_once 'Firebase.php';
 
-$factory = (new Factory())->withDatabaseUri('https://teste-dfb53-default-rtdb.firebaseio.com/');
-$database = $factory->createDatabase();
+$firebaseConnection = Firebase::getInstance();
+$database = $firebaseConnection->getDatabase();
 
 $vendas = $database->getReference('vendas')->getValue();
-
 ?>
 
 <!DOCTYPE html>

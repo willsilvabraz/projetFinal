@@ -1,14 +1,15 @@
 <?php
 session_start();
 require __dir__.'/vendor/autoload.php';
-use Kreait\Firebase\Factory;
+require_once 'Firebase.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
     
-    $factory = (new Factory())->withDatabaseUri('https://teste-dfb53-default-rtdb.firebaseio.com/');
-    $database = $factory->createDatabase();
+    $firebaseConnection = Firebase::getInstance();
+    $database = $firebaseConnection->getDatabase();
+    
     $usuarios = $database->getReference('usuarios')->orderByChild('email')->equalTo($email)->getValue();
     
     if ($usuarios) {
@@ -78,5 +79,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
       </div>
     </div>
-  </body>
+</body>
 </html>

@@ -6,16 +6,16 @@ if (session_status() == PHP_SESSION_NONE) {
 
 if (!isset($_SESSION['cargo'])) {
     header("Location: login.php");
-    
     exit();
 }
-
 
 require __dir__.'/vendor/autoload.php';
 use Kreait\Firebase\Factory;
 
-$factory = (new Factory())->withDatabaseUri('https://teste-dfb53-default-rtdb.firebaseio.com/');
-$database = $factory->createDatabase();
+$firebase = Firebase::getInstance();
+
+$database = $firebase->getDatabase();
+
 $contatos = $database->getReference('vendas')->getSnapshot();
 $vendas = $contatos->getValue();
 
@@ -32,7 +32,6 @@ foreach ($vendas as $venda) {
 arsort($produtosMaisVendidos);
 
 $produtosMaisVendidos = array_slice($produtosMaisVendidos, 0, 5, true);
-
 
 $labels = array_keys($produtosMaisVendidos);
 $data = array_values($produtosMaisVendidos);
@@ -52,7 +51,7 @@ $dadosGraficoBarras = [
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

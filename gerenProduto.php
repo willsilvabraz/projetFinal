@@ -1,7 +1,10 @@
 <?php
-
+session_start();
 require __dir__.'/vendor/autoload.php';
-use Kreait\Firebase\Factory;
+require_once 'Firebase.php';
+
+$firebaseConnection = Firebase::getInstance();
+$database = $firebaseConnection->getDatabase();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['nome']) && isset($_POST['descricao']) && isset($_POST['preco']) && !empty($_POST['nome']) && !empty($_POST['descricao']) && !empty($_POST['preco'])) {
@@ -9,8 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $descricao = $_POST['descricao'];
         $preco = $_POST['preco'];
 
-        $factory = (new Factory())->withDatabaseUri('https://teste-dfb53-default-rtdb.firebaseio.com/');
-        $database = $factory->createDatabase();
         $database->getReference('produtos')->push([
             'nome' => $nome,
             'descricao' => $descricao,
@@ -19,16 +20,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } 
 }
 
-
 if (isset($_GET['delete'])) {
     $produto_id = $_GET['delete'];
-    $factory = (new Factory())->withDatabaseUri('https://teste-dfb53-default-rtdb.firebaseio.com/');
-    $database = $factory->createDatabase();
     $database->getReference('produtos/' . $produto_id)->remove();
 }
 
-$factory = (new Factory())->withDatabaseUri('https://teste-dfb53-default-rtdb.firebaseio.com/');
-$database = $factory->createDatabase();
 $contatos = $database->getReference('produtos')->getSnapshot();
 $produtos = $contatos->getValue();
 ?>
