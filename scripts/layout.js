@@ -51,13 +51,6 @@ document.addEventListener("DOMContentLoaded", function() {
         showContent('vendas-content');
     });
 
-    document.getElementById('link-sair').addEventListener('click', function(event) {
-        event.preventDefault();
-        showContent('sair-content');
-        localStorage.removeItem("selectedContent");
-        localStorage.removeItem("scrollPosition");
-        window.location.href = 'logout.php';
-    });
 });
 
 document.addEventListener("DOMContentLoaded", function() {
