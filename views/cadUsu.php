@@ -1,9 +1,9 @@
 
 <?php
-require __DIR__.'/vendor/autoload.php';
-require_once 'sessao.php';
-require_once 'Firebase.php';
-require_once 'CadastroFactory.php';
+require __DIR__.'views/../vendor/autoload.php';
+require_once '../Classes/sessao.php';
+require_once '../Classes/Firebase.php';
+require_once '../Classes/CadastroFactory.php';
 
 $sessao = Sessao::getInstancia();
 $sessao->requerLogin();

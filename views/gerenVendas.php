@@ -1,9 +1,10 @@
 <?php
-require __DIR__.'/vendor/autoload.php';
-require_once 'Sessao.php';
-require_once 'Firebase.php';
-require_once 'CadastroFactory.php';
-require_once 'Vendas.php';
+require __DIR__.'views/../vendor/autoload.php';
+require_once '../Classes/sessao.php';
+require_once '../Classes/Firebase.php';
+require_once '../Classes/CadastroFactory.php';
+require_once '../Classes/Vendas.php';
+
 
 $sessao = Sessao::getInstancia();
 $sessao->requerLogin();
@@ -20,15 +21,18 @@ $produtos = $gerenciadorProdutos->listar();
 $cadastro = CadastroFactory::criarCadastro('vendas', $database);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $produto_id = $_POST['produto_id'];
-    $quantidade = $_POST['quantidade'];
-    $produto = $produtos[$produto_id];
-    $total = $produto['preco'] * $quantidade;
-
-    $_POST['total'] = $total;
-
-    $cadastro->cadastrar($_POST);
+    if (!empty($_POST['produto_id']) || !empty($_POST['quantidade'])) {
+        $produto_id = $_POST['produto_id'];
+        $quantidade = $_POST['quantidade'];
+        $produto = $produtos[$produto_id];
+        $total = $produto['preco'] * $quantidade;
+        
+        $_POST['total'] = $total;
+        
+        $cadastro->cadastrar($_POST);
+    }
 }
+
 
 $vendas = $cadastro->listar();
 ?>

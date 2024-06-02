@@ -1,8 +1,8 @@
 <?php
-require __dir__.'/vendor/autoload.php';
+require __DIR__.'views/../vendor/autoload.php';
+require_once '../Classes/sessao.php';
+require_once '../Classes/Firebase.php';
 
-require_once 'sessao.php';
-require_once 'Firebase.php';
 
 $sessao = Sessao::getInstancia();
 $sessao->requerLogin();
@@ -18,8 +18,8 @@ $database = $firebaseConnection->getDatabase();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Layout Lateral em PHP</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./styles/dashboard.css">
-    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="../styles/dashboard.css">
+    <link rel="stylesheet" href="../styles/layout.css">
 </head>
 <body>
 
@@ -28,7 +28,7 @@ $database = $firebaseConnection->getDatabase();
         <div class="col-md-3 col-lg-2 sidebar bg-dark">
             <nav class="nav flex-column">
                 <div id="header-bar">
-                    <img src="./img/OIG3.3Kje.lad.png" >
+                    <img src="../img/OIG3.3Kje.lad.png" >
                     <p>Pos Dash</p>
                 </div>
                 <a class="nav-link active" href="" id="link-dashboard">Dashboard</a>
@@ -49,6 +49,6 @@ $database = $firebaseConnection->getDatabase();
 </div>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="./scripts/layout.js"></script>
+<script src="../scripts/layout.js"></script>
 </body>
 </html>
