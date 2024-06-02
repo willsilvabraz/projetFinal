@@ -26,11 +26,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     window.addEventListener('beforeunload', storeScrollPosition);
 
-    document.getElementById('link-listar-vendas').addEventListener('click', function(event) {
-        event.preventDefault();
-        showContent('listar-vendas-content');
-    });
-
     document.getElementById('link-dashboard').addEventListener('click', function(event) {
         event.preventDefault();
         showContent('dashboard-content');

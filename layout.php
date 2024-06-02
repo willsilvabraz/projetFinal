@@ -35,7 +35,6 @@ $database = $firebaseConnection->getDatabase();
                 <a class="nav-link" href="" id="link-clientes">Gerenciar Clientes</a>
                 <a class="nav-link" href="" id="link-produtos">Gerenciar Produtos</a>
                 <a class="nav-link" href="" id="link-vendas">Realizar Vendas</a>
-                <a class="nav-link" href="" id="link-listar-vendas">Listar Vendas</a>
                 <a class="nav-link" href="" id="link-sair">Sair</a>
             </nav>
         </div>
@@ -43,9 +42,8 @@ $database = $firebaseConnection->getDatabase();
             <div id="dashboard-content" style="display: none;"><?php include_once('dash.php');?></div>
             <div id="clientes-content" style="display: none;"><?php include_once('gerenClientes.php');?></div>
             <div id="produtos-content" style="display: none;"><?php include_once('gerenProduto.php');?></div>
-            <div id="vendas-content" style="display: none;"><?php include_once('venda.php');?></div>
-            <div id="listar-vendas-content" style="display: none;"><?php include_once('listVenda.php');?></div>
-            <div id="sair-content" style="display: none;"><?php Sessao::getInstancia()->destruir(); ?></div>
+            <div id="vendas-content" style="display: none;"><?php include_once('gerenVendas.php');?></div>
+            <div id="sair-content" style="display: none;"></div>
         </div>
     </div>
 </div>

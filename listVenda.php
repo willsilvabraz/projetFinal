@@ -1,15 +1,11 @@
 <?php
 require_once 'sessao.php';
+require __DIR__.'/vendor/autoload.php';
 require_once 'Firebase.php';
 
 $sessao = Sessao::getInstancia();
 $sessao->requerLogin();
 
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
-require __DIR__.'/vendor/autoload.php';
 
 $firebaseConnection = Firebase::getInstance();
 $database = $firebaseConnection->getDatabase();

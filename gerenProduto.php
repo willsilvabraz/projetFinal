@@ -2,6 +2,8 @@
 require __dir__.'/vendor/autoload.php';
 require_once 'Firebase.php';
 require_once 'Sessao.php';
+require_once 'CadastroFactory.php';
+
 
 $sessao = Sessao::getInstancia();
 $sessao->requerLogin();
@@ -9,27 +11,17 @@ $sessao->requerLogin();
 $firebaseConnection = Firebase::getInstance();
 $database = $firebaseConnection->getDatabase();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['nome']) && isset($_POST['descricao']) && isset($_POST['preco']) && !empty($_POST['nome']) && !empty($_POST['descricao']) && !empty($_POST['preco'])) {
-        $nome = $_POST['nome'];
-        $descricao = $_POST['descricao'];
-        $preco = $_POST['preco'];
+$cadastro = CadastroFactory::criarCadastro('produto', $database);
 
-        $database->getReference('produtos')->push([
-            'nome' => $nome,
-            'descricao' => $descricao,
-            'preco' => $preco
-        ]);
-    }
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $cadastro->cadastrar($_POST);
 }
 
 if (isset($_GET['delete'])) {
-    $produto_id = $_GET['delete'];
-    $database->getReference('produtos/' . $produto_id)->remove();
+    $cadastro->deletar($_GET['delete']);
 }
 
-$contatos = $database->getReference('produtos')->getSnapshot();
-$produtos = $contatos->getValue();
+$produtos = $cadastro->listar();
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +37,7 @@ $produtos = $contatos->getValue();
 
 <div class="container">
     <div class="col-12" id="cad">
-        <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <h1>Cadastro de Produtos</h1>
             <div class="form-group">
                 <label for="nome">Nome:</label>
@@ -101,4 +93,3 @@ document.addEventListener('DOMContentLoaded', function () {
 
 </body>
 </html>
-
