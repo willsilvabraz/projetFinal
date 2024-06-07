@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Vendas</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="col-12" id="cad">
+        <form id="vendasForm">
+            <h1>Registro de Vendas</h1>
+            <div class="form-group">
+                <label for="cliente_id">Cliente:</label>
+                <select class="form-control" id="cliente_id" name="cliente_id" required>
+                    <!-- Opções serão carregadas via JavaScript -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="produto_id">Produto:</label>
+                <select class="form-control" id="produto_id" name="produto_id" required>
+                    <!-- Opções serão carregadas via JavaScript -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="quantidade">Quantidade:</label>
+                <input type="number" class="form-control" id="quantidade" name="quantidade" required>
+            </div>
+
+            <div class="form-group">
+                <label for="total">Total:</label>
+                <input type="text" class="form-control" id="total" name="total" readonly required>
+            </div>
+            <button type="submit" class="btn btn-primary">Registrar Venda</button>
+        </form>
+    </div>
+
+    <table class="table table-responsive" id="listavendas">
+        <h2>Lista de Vendas</h2>
+        <thead>
+            <tr>
+                <th>ID Cliente</th>
+                <th>ID Produto</th>
+                <th>Quantidade</th>
+                <th>Total</th>
+                <th>Data</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Conteúdo será carregado via JavaScript -->
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+$(document).ready(function() {
+    var produtos = {};
+
+    function loadFormOptions(data) {
+        var clientesOptions = '';
+        $.each(data.clientes, function(key, cliente) {
+            clientesOptions += '<option value="' + key + '">' + cliente.nome + '</option>';
+        });
+        $('#cliente_id').html(clientesOptions);
+
+        var produtosOptions = '';
+        produtos = data.produtos;
+        $.each(data.produtos, function(key, produto) {
+            produtosOptions += '<option value="' + key + '">' + produto.nome + '</option>';
+        });
+        $('#produto_id').html(produtosOptions);
+    }
+
+    function loadVendas() {
+        $.getJSON('views/gerenVendas.php', function(data) {
+            var vendasHtml = '';
+            if (data.vendas && Object.keys(data.vendas).length > 0) {
+                $.each(data.vendas, function(key, venda) {
+                    vendasHtml += '<tr>';
+                    vendasHtml += '<td>' + venda.cliente_id + '</td>';
+                    vendasHtml += '<td>' + venda.produto_id + '</td>';
+                    vendasHtml += '<td>' + venda.quantidade + '</td>';
+                    vendasHtml += '<td>' + venda.total + '</td>';
+                    vendasHtml += '<td>' + venda.data + '</td>';
+                    vendasHtml += '<td><button class="btn btn-danger btn-excluir" data-key="' + key + '">Deletar</button></td>';
+                    vendasHtml += '</tr>';
+                });
+            } else {
+                vendasHtml = '<tr><td colspan="6">Nenhuma venda encontrada.</td></tr>';
+            }
+            $('#listavendas tbody').html(vendasHtml);
+            loadFormOptions(data);
+        });
+    }
+
+    $('#produto_id, #quantidade').change(function() {
+        var produto_id = $('#produto_id').val();
+        var quantidade = $('#quantidade').val();
+        if (produto_id && quantidade && produtos[produto_id]) {
+            var produto = produtos[produto_id];
+            var total = produto.preco * quantidade;
+            $('#total').val(total);
+        } else {
+            $('#total').val('');
+        }
+    });
+
+    $('#vendasForm').submit(function(event) {
+        event.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: 'views/gerenVendas.php',
+            data: $(this).serialize(),
+            success: function(response) {
+                $('#vendasForm')[0].reset();
+                $('#total').val('');
+                loadVendas();
+            }
+        });
+    });
+
+    $('#listavendas').on('click', '.btn-excluir', function(event) {
+        event.preventDefault();
+        var key = $(this).data('key');
+        if (confirm('Tem certeza que deseja deletar esta venda?')) {
+            $.ajax({
+                type: 'GET',
+                url: 'views/gerenVendas.php?delete=' + key,
+                success: function(response) {
+                    loadVendas();
+                }
+            });
+        }
+    });
+
+    loadVendas();
+});
+</script>
+
+</body>
+</html>
