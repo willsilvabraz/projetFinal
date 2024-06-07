@@ -62,7 +62,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
     function loadProdutos() {
-        $.getJSON('views/gerenProduto.php', function(data) {
+        $.getJSON('gerenProduto.php', function(data) {
             var produtosHtml = '';
             if (data && Object.keys(data).length > 0) {
                 $.each(data, function(key, produto) {
@@ -87,7 +87,7 @@
             event.preventDefault();
             $.ajax({
                 type: 'POST',
-                url: 'views/gerenProduto.php',
+                url: 'gerenProduto.php',
                 data: $(this).serialize(),
                 success: function(response) {
                     $('#cadastroForm')[0].reset();
@@ -102,7 +102,7 @@
             if (confirm('Tem certeza que deseja deletar este produto?')) {
                 $.ajax({
                     type: 'GET',
-                    url: 'views/gerenProduto.php?delete=' + key,
+                    url: 'gerenProduto.php?delete=' + key,
                     success: function(response) {
                         loadProdutos();
                     }

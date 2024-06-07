@@ -15,13 +15,13 @@
             <div class="form-group">
                 <label for="cliente_id">Cliente:</label>
                 <select class="form-control" id="cliente_id" name="cliente_id" required>
-                    <!-- Opções serão carregadas via JavaScript -->
+                
                 </select>
             </div>
             <div class="form-group">
                 <label for="produto_id">Produto:</label>
                 <select class="form-control" id="produto_id" name="produto_id" required>
-                    <!-- Opções serão carregadas via JavaScript -->
+                
                 </select>
             </div>
             <div class="form-group">
@@ -50,7 +50,7 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Conteúdo será carregado via JavaScript -->
+
         </tbody>
     </table>
 </div>
@@ -76,7 +76,7 @@ $(document).ready(function() {
     }
 
     function loadVendas() {
-        $.getJSON('views/gerenVendas.php', function(data) {
+        $.getJSON('gerenVendas.php', function(data) {
             var vendasHtml = '';
             if (data.vendas && Object.keys(data.vendas).length > 0) {
                 $.each(data.vendas, function(key, venda) {
@@ -113,7 +113,7 @@ $(document).ready(function() {
         event.preventDefault();
         $.ajax({
             type: 'POST',
-            url: 'views/gerenVendas.php',
+            url: 'gerenVendas.php',
             data: $(this).serialize(),
             success: function(response) {
                 $('#vendasForm')[0].reset();
@@ -129,7 +129,7 @@ $(document).ready(function() {
         if (confirm('Tem certeza que deseja deletar esta venda?')) {
             $.ajax({
                 type: 'GET',
-                url: 'views/gerenVendas.php?delete=' + key,
+                url: 'gerenVendas.php?delete=' + key,
                 success: function(response) {
                     loadVendas();
                 }

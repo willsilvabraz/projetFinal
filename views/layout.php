@@ -41,8 +41,8 @@ $database = $firebaseConnection->getDatabase();
         <div class="col-md-9 col-lg-10 content" id="main-content">
             <div id="dashboard-content" style="display: none;"><?php include_once('dash.php');?></div>
             <div id="clientes-content" style="display: none;"><?php include_once('../Cliente.html');?></div>
-            <div id="produtos-content" style="display: none;"><?php include_once('gerenProduto.php');?></div>
-            <div id="vendas-content" style="display: none;"><?php include_once('gerenVendas.php');?></div>
+            <div id="produtos-content" style="display: none;"><?php include_once('../Produto.html');?></div>
+            <div id="vendas-content" style="display: none;"><?php include_once('../Vendas.html');?></div>
             <div id="sair-content" style="display: none;"></div>
         </div>
     </div>
@@ -50,6 +50,10 @@ $database = $firebaseConnection->getDatabase();
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="../scripts/layout.js"></script>
+<script src="">
+    
+</script>
+
 
 </body>
 </html>

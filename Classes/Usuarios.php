@@ -9,11 +9,11 @@ class Usuarios extends Cadastro {
     public function cadastrar($dados) {
         if (isset($dados['nome']) && isset($dados['email']) && isset($dados['senha']) && isset($dados['cargo']) && !empty($dados['nome']) && !empty($dados['email']) && !empty($dados['senha']) && !empty($dados['cargo'])) {
             parent::cadastrar([
-                'cliente_id' => $dados['cliente_id'],
-                'produto_id' => $dados['produto_id'],
-                'quantidade' => $dados['quantidade'],
-                'total' => $dados['total'],
-                'data' => date("Y-m-d H:i:s")
+                'nome' => $dados['nome'],
+                'email' => $dados['email'],
+                'senha' => $dados['senha'],
+                'cargo' => $dados['cargo'],
+                
             ]);
         }
     }

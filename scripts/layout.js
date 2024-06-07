@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (scrollPosition) {
         window.scrollTo(0, scrollPosition);
     }
+    console.log("asdasdasdasd")
 
     function showContent(contentId) {
         var contents = document.querySelectorAll('.content > div');
