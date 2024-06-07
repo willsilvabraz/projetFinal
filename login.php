@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 type="password"
                 id="senha"
                 name="senha"
-                placeholder="Digite sua senha"
+                placeholder="Digite sua senha.."
                 required
               />
             </div>

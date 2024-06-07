@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: vendas.php?success=1");
             exit();
         } else {
-            echo "Cliente ou produto não encontrado.";
+            echo "Cliente ou produto não encontrado...";
         }
     } 
 }

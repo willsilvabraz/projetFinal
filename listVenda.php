@@ -32,7 +32,7 @@ $vendas = $database->getReference('vendas')->getValue();
 
 <div class="container">
     <div class="col-lg-12">
-        <h1>Listar Vendas</h1>
+        <h1>Listar Vendas...</h1>
         <table class="table">
             <thead>
                 <tr>
